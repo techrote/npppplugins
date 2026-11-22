@@ -1,0 +1,46 @@
+name: TokenStatus CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  portable-tests:
+    name: Portable unit and Win32-message emulation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and run token approximation tests
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror plugins/TokenStatus/tests/token_utils_test.cpp -o /tmp/token-utils-test
+          /tmp/token-utils-test
+      - name: Build and run status-bar emulation
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror plugins/TokenStatus/tests/status_emulation_test.cpp -o /tmp/status-emulation-test
+          /tmp/status-emulation-test
+
+  native-x64:
+    name: Native Windows x64 DLL
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure (MSVC x64)
+        run: cmake -S plugins/TokenStatus -B build/tokenstatus -A x64
+      - name: Build (Release)
+        run: cmake --build build/tokenstatus --config Release
+      - name: Stage installable DLL
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path package/TokenStatus | Out-Null
+          Copy-Item build/tokenstatus/Release/TokenStatus.dll package/TokenStatus/TokenStatus.dll
+      - name: Upload Windows x64 plugin
+        uses: actions/upload-artifact@v4
+        with:
+          name: TokenStatus-windows-x64
+          path: package/TokenStatus
+          if-no-files-found: error
+          retention-days: 30
