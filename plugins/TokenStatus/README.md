@@ -9,7 +9,7 @@ A small native Notepad++ plugin that adds a **ballpark token count** to the exis
 Download the **TokenStatus-windows-x64** artifact from a successful GitHub Actions build, then:
 
 1. Exit Notepad++.
-2. Extract the built DLL to \`plugins\TokenStatus\TokenStatus.dll\` inside the directory containing \`notepad++.exe\`. The usual installation is \`C:\Program Files\Notepad++\plugins\TokenStatus\TokenStatus.dll\`.
+2. Extract the built DLL to `plugins\TokenStatus\TokenStatus.dll` inside the directory containing `notepad++.exe`. The usual installation is `C:\Program Files\Notepad++\plugins\TokenStatus\TokenStatus.dll`.
 3. Restart Notepad++. The extra count should appear automatically.
 4. Toggle it with **Plugins > TokenStatus > Show approximate tokens**.
 
@@ -27,23 +27,23 @@ To uninstall, close Notepad++, remove the TokenStatus plugin folder, and restart
 
 With Visual Studio C++/Windows SDK and CMake installed:
 
-\`\`\`powershell
+```powershell
 cmake -S plugins/TokenStatus -B build/tokenstatus -A x64
 cmake --build build/tokenstatus --config Release
-\`\`\`
+```
 
-The DLL is at \`build/tokenstatus/Release/TokenStatus.dll\`. Alternatively, run \`plugins/TokenStatus/build-windows.ps1\`.
+The DLL is at `build/tokenstatus/Release/TokenStatus.dll`. Alternatively, run `plugins/TokenStatus/build-windows.ps1`.
 
 ## Tests
 
 The repository's CI runs two portable tests on Linux:
 
-\`\`\`sh
+```sh
 g++ -std=c++17 -Wall -Wextra -Werror plugins/TokenStatus/tests/token_utils_test.cpp -o /tmp/token-utils-test
 /tmp/token-utils-test
 g++ -std=c++17 -Wall -Wextra -Werror plugins/TokenStatus/tests/status_emulation_test.cpp -o /tmp/status-emulation-test
 /tmp/status-emulation-test
-\`\`\`
+```
 
 The emulation test exercises the real plugin code against simulated Win32 messages; it is **not** an end-to-end Windows Notepad++ test. CI also builds a native x64 DLL using Windows/MSVC and uploads it as a workflow artifact.
 
