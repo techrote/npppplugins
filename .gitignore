@@ -1,0 +1,12 @@
+# Locally generated build and test products
+/build/
+/plugins/*/build/
+/plugins/*/build-cross/
+*.obj
+*.o
+*.pdb
+*.ilk
+*.exp
+*.lib
+*.dll
+.DS_Store
